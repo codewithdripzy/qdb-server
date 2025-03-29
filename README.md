@@ -1,4 +1,4 @@
-# DroneQ
+# QueueDB
 
 A lightweight and fast queue database server with WebSocket support for real-time data streaming.
 
@@ -7,13 +7,13 @@ A lightweight and fast queue database server with WebSocket support for real-tim
 ## Installation
 
 ```bash
-npm install droneq
+npm install queuedb
 ```
 
 ## Quick Start
 
 ```typescript
-import { QDB, QDBServer } from 'droneq';
+import { QDB, QDBServer } from 'queuedb';
 
 // Create a new QDB server
 const server = new QDBServer("MyApp", {
@@ -35,11 +35,14 @@ server.listen();
 
 ## WebSocket API Documentation
 
-DroneQ provides a powerful WebSocket API that allows direct communication with the database server. You can connect to the WebSocket server using the following URL format:
+QDB provides a powerful WebSocket API that allows direct communication with the database server. You can connect to the WebSocket server using the following URL format:
+
 ```
 ws://localhost:3000/{db_name}/{table_name}
 ```
+
 or
+
 ```
 ws://localhost:3000/{db_name}/{table_name}/{primary_key_value}
 ```
@@ -47,12 +50,14 @@ ws://localhost:3000/{db_name}/{table_name}/{primary_key_value}
 ### Message Types
 
 There are two main types of messages:
+
 1. `query` - One-time operations that execute and return results
 2. `subscribe` - Continuous operations that listen for changes based on an interval
 
 ### HTTP Methods
 
 The API supports the following HTTP methods:
+
 - `PUT` - Creates a new table and can load initial data
 - `GET` - Retrieves data from a table or a single row based on the route
 - `DELETE` - Deletes a row, table, or database based on the route
@@ -128,7 +133,7 @@ The API supports the following HTTP methods:
 1. **Using WebSocket Client**
    ```javascript
    const ws = new WebSocket('ws://localhost:3000/mydb/users');
-   
+
    ws.onopen = () => {
      // Create a new table
      ws.send(JSON.stringify({
@@ -141,7 +146,7 @@ The API supports the following HTTP methods:
        ]
      }));
    };
-   
+
    ws.onmessage = (event) => {
      const response = JSON.parse(event.data);
      console.log('Received:', response);
@@ -151,26 +156,27 @@ The API supports the following HTTP methods:
 ### Route Examples
 
 1. **Get All Records**
+
    ```
    ws://localhost:3000/mydb/users
    ```
-
 2. **Get Single Record**
+
    ```
    ws://localhost:3000/mydb/users/1
    ```
-
 3. **Delete Record**
+
    ```
    ws://localhost:3000/mydb/users/1
    ```
-
 4. **Delete Table**
+
    ```
    ws://localhost:3000/mydb/users
    ```
-
 5. **Delete Database**
+
    ```
    ws://localhost:3000/mydb
    ```
@@ -178,23 +184,24 @@ The API supports the following HTTP methods:
 ### Best Practices
 
 1. **Error Handling**
+
    - Set `throwOnError: true` for critical operations
    - Set `throwOnError: false` for subscription operations to prevent connection drops
    - Always check the response's `success` field and handle `error` messages
-
 2. **Subscriptions**
+
    - Use subscriptions for real-time updates
    - Set appropriate `interval` values (default: 1000ms)
    - Use `timeout` to automatically clean up long-running subscriptions
    - Clean up subscriptions when no longer needed
-
 3. **Data Operations**
+
    - Use PUT for table creation and initial data
    - Use POST for adding data to existing tables
    - Use DELETE with caution, especially for table/database deletion
    - Use `onConflict` option to handle duplicate entries
-
 4. **Performance**
+
    - Batch operations when possible
    - Use appropriate indexes for frequently queried columns
    - Monitor subscription intervals
@@ -203,6 +210,7 @@ The API supports the following HTTP methods:
 ### Response Format
 
 All responses follow this general format:
+
 ```json
 {
     "success": true/false,
@@ -214,6 +222,7 @@ All responses follow this general format:
 ### Error Messages
 
 Common error messages you might encounter:
+
 - `Database '{db_name}' not found`
 - `Table '{table_name}' does not exist`
 - `Table '{table_name}' already exists`
