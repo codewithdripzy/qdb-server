@@ -1,18 +1,44 @@
 {
-  "name": "droneq",
+  "name": "qdb",
   "version": "1.0.0",
-  "description": "A Node.js TypeScript project",
+  "description": "A lightweight and fast queue database server with WebSocket support for real-time data streaming",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "_moduleAliases": {
+    "@": "dist"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "start": "node dist/app.js",
     "dev": "ts-node -r tsconfig-paths/register src/app.ts",
     "dev:watch": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' -r tsconfig-paths/register src/app.ts",
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "database",
+    "websocket",
+    "queue",
+    "streaming",
+    "realtime",
+    "typescript",
+    "nodejs"
+  ],
+  "author": "Emmanuel Bankole",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codewithdripzy/me.git"
+  },
+  "bugs": {
+    "url": "https://github.com/codewithdripzy/qdb-server/issues"
+  },
+  "homepage": "https://github.com/codewithdripzy/qdb-server#readme",
   "devDependencies": {
     "@types/node": "^20.11.24",
     "nodemon": "^3.1.9",
@@ -25,6 +51,7 @@
     "@types/sqlite3": "^3.1.11",
     "@types/ws": "^8.18.0",
     "auth-validify": "^1.0.5",
+    "module-alias": "^2.2.3",
     "sqlite3": "^5.1.7",
     "ws": "^8.18.1"
   }

@@ -1,4 +1,4 @@
-import { CreateTableOptions, DeleteTableOptions, InsertTableOptions, InsertManyTableOptions, QDBExecuteOptions, SelectTableOptions, UpdateTableOptions, WhereOptions, GetTablesOptions } from "@/interfaces/tables";
+import { CreateTableOptions, DeleteTableOptions, InsertTableOptions, InsertManyTableOptions, QDBExecuteOptions, SelectTableOptions, UpdateTableOptions, WhereOptions, GetTablesOptions, DeleteByPrimaryKeyOptions } from "@/interfaces/tables";
 import { Database } from "sqlite3/lib/sqlite3";
 import { TableColumnConstraints } from "@/core/enums";
 
@@ -76,6 +76,21 @@ class QDBQueries{
 
     async delete({ table, where } : DeleteTableOptions){
         const query = `DELETE FROM ${table} WHERE ${where}`;
+        return query;
+    }
+
+    async deleteByPrimaryKey({ table, primaryKey } : DeleteByPrimaryKeyOptions){
+        const query = `DELETE FROM ${table} WHERE ${primaryKey.key} = ${primaryKey.value}`;
+        return query;
+    }
+
+    async deleteTable(table: string){
+        const query = `DROP TABLE IF EXISTS ${table}`;
+        return query;
+    }
+
+    async deleteDb(db: string){
+        const query = `DROP DATABASE IF EXISTS ${db}`;
         return query;
     }
 

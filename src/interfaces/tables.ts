@@ -48,6 +48,14 @@ interface DeleteTableOptions {
     where: string;
 }
 
+interface DeleteByPrimaryKeyOptions{
+    table: string;
+    primaryKey: {
+        key: string;
+        value: string;
+    };
+}
+
 interface QDBExecuteOptions{
     query: string;
     timeout?: number;
@@ -76,6 +84,22 @@ interface QDBInsertData{
     onConflict?: TableConflictOptions;
 }
 
+interface QDBDeleteDbData{
+    name: string;
+}
+
+interface QDBDeleteData{
+    name: string;
+    primaryKey: {
+        key: string;
+        value: string;
+    };
+}
+
+interface QDBDeleteTableData{
+    name: string;
+}
+
 interface QDBQueryResult{
     success: boolean;
     data: any;
@@ -101,5 +125,9 @@ export type {
     GetTablesOptions,
     QDBQueryResult,
     QDBTableData,
-    QDBInsertData
+    QDBInsertData,
+    QDBDeleteData,
+    DeleteByPrimaryKeyOptions,
+    QDBDeleteTableData,
+    QDBDeleteDbData
 };

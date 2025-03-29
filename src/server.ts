@@ -143,20 +143,28 @@ class QDBServer {
                 if(routes.length > 2) {
                     const requestedPrimaryKeyID = routes[2];
 
-                    // check if the table has the requested primary key
-                    const filteredData = tableData.data.filter((item: any) => item[tableData.primaryKey].toString() === requestedPrimaryKeyID.toString());
+                    if(tableData.data.length > 0) {
+                        // check if the table has the requested primary key
+                        const filteredData = tableData.data.filter((item: any) => item[tableData.primaryKey].toString() === requestedPrimaryKeyID.toString());
 
-                    return {
-                        success: true,
-                        data: filteredData
-                    };
+                        return {
+                            success: true,
+                            data: filteredData
+                        };
+                    } else {
+                        return {
+                            success: false,
+                            error: `Table '${requestedRoute}' is empty`,
+                            data: {}
+                        };
+                    }
                 }
-
                 return {
                     success: true,
                     data: tableData.data
                 };
             } else if(tableAlias) {
+                // get the data from the alias
                 return {
                     success: true,
                     data: {}
@@ -309,8 +317,103 @@ class QDBServer {
     }
 
     private async handleDelete(ws: WebSocket, routes: string[], data: QDBServerQuery) : Promise<QDBServerResponse>{
+        const requestedDb = routes[0];
+
+        // check if there's any mounted db with the requested db name
+        const mountedDb = this.dbs.find(db => db.path === requestedDb);
+        if(!mountedDb) {
+            return {
+                success: false,
+                error: `Database '${requestedDb}' not found`,
+                data: {}
+            };
+        }
+
+        if(routes.length > 1) {
+            const requestedRoute = routes[1];
+
+            // check if method is GET
+            // if(data.method === QdbServerRequestType.GET) {
+            const tableExists = mountedDb.db.tables.find(table => table.name === requestedRoute);
+            const tableAlias = mountedDb.routes.find(route => route.path === requestedRoute);
+
+            // if table does not exist, check if there's an alias that carries the requested route name
+            if(tableExists) {
+                // get the data from the table
+                const tableData: QDBTableData = await mountedDb.db.getTableData(tableExists);
+                
+                // check if there's a primary key value
+                if(routes.length > 2) {
+                    const requestedPrimaryKeyID = routes[2];
+
+                    const deletedData = await mountedDb.db.deleteDataByPrimaryKey({
+                        name: requestedRoute,
+                        primaryKey: {
+                            key: tableData.primaryKey,
+                            value: requestedPrimaryKeyID
+                        }
+                    });
+
+                    if(deletedData.success) {
+                        return {
+                            success: true,
+                            data: deletedData.data
+                        };
+                    }
+
+                    return {
+                        success: false,
+                        error: deletedData.error,
+                        data: {}
+                    };
+                }
+
+                // delete the table
+                const deletedTable = await mountedDb.db.deleteTable({
+                    name: requestedRoute
+                });
+
+                // remove the table from the list of tables in the qdb
+                const tableIndex = mountedDb.db.tables.findIndex((item) => item.name === requestedRoute);
+
+                if(tableIndex !== -1) {
+                    this.dbs.find(db => db.path === requestedDb)?.db.tables.splice(tableIndex, 1);
+                }
+
+                return {
+                    success: true,
+                    data: deletedTable.data,
+                };
+            } else if(tableAlias) {
+                // get the data from the alias
+                return {
+                    success: true,
+                    data: {}
+                };
+            }else {
+                return {
+                    success: false,
+                    error: `Route of '${requestedRoute}' is not associated with any table or alias, Try creating a table or alias for '${requestedRoute}'`,
+                    data: {}
+                };
+            }
+        }
+
+        // delete the db
+        const deletedDb = await mountedDb.db.deleteDb({
+            name: requestedDb
+        });
+
+        if(deletedDb.success) {
+            return {
+                success: true,
+                data: deletedDb.data
+            };
+        }
+
         return {
-            success: true,
+            success: false,
+            error: deletedDb.error,
             data: {}
         }
     }

@@ -12,11 +12,14 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "baseUrl": ".",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
     "paths": {
       "@/*": ["src/*"],
       "*": ["node_modules/*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*", "test/src/app.js"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts"]
 } 

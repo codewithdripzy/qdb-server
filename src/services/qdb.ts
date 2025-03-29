@@ -2,7 +2,7 @@ import QDBConfig from "@/config/setup";
 import QDBQueries from "@/database/queries";
 import { QDBOptions } from "@/interfaces/qdb";
 import { Password } from "auth-validify";
-import { QDBQueryResult, QDBTable, QDBTableData, QDBInsertData } from "@/interfaces/tables";
+import { QDBQueryResult, QDBTable, QDBTableData, QDBInsertData, QDBDeleteData, QDBDeleteTableData, QDBDeleteDbData } from "@/interfaces/tables";
 import { Database } from "sqlite3/lib/sqlite3";
 import { TableColumnConstraints, TableConflictOptions } from "@/core/enums";
 
@@ -11,7 +11,7 @@ class QDB{
     options: QDBOptions;
     db: Database;
     tables: QDBTable[];
-    private config: QDBConfig;
+    config: QDBConfig;
     private queries: QDBQueries;
     private psw: Password;
 
@@ -140,6 +140,90 @@ class QDB{
             };
         }
     }
+
+    async deleteDataByPrimaryKey(data: QDBDeleteData): Promise<QDBQueryResult>{
+        try{
+            const deleteQuery = await this.queries.deleteByPrimaryKey({
+                table: data.name,
+                primaryKey: {
+                    key: data.primaryKey.key,
+                    value: data.primaryKey.value
+                }
+            });
+
+            const deleteData = await this.queries.execute(deleteQuery);
+
+            return {
+                success: true,
+                data: deleteData
+            };
+        } catch(error){
+            console.log(error);
+            
+            return {
+                success: false,
+                error: error,
+                data: null
+            };
+        }
+    }
+
+    async deleteTable(data: QDBDeleteTableData): Promise<QDBQueryResult>{
+        try {
+            const deleteQuery = await this.queries.deleteTable(data.name);
+            const deleteData = await this.queries.execute(deleteQuery);
+
+            return {
+                success: true,
+                data: deleteData
+            };
+        } catch(error){
+            console.log(error);
+            
+            return {
+                success: false,
+                error: error,
+                data: null
+            };
+        }
+    }
+
+    async deleteDb(data: QDBDeleteDbData): Promise<QDBQueryResult>{
+        try {
+            const deleteQuery = await this.queries.deleteDb(data.name);
+            const deleteData = await this.queries.execute(deleteQuery);
+
+            return {
+                success: true,
+                data: deleteData
+            };
+        } catch(error){
+            console.log(error);
+            
+            return {
+                success: false,
+                error: error,
+                data: null
+            };
+        }
+    }
+    // async deleteData(data: QDBDeleteData): Promise<QDBQueryResult>{
+    //     try {
+    //         const deleteQuery = await this.queries.delete({
+    //             table: data.name,
+    //             primaryKey: data.primaryKey
+    //         });
+
+    //         const deleteData = await this.queries.execute(deleteQuery);
+            
+    //         return {
+    //             success: true,
+    //             data: deleteData
+    //         };
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
 
     async connect(){
         // this.db.open();

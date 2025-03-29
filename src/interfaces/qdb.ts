@@ -1,4 +1,4 @@
-import { QdbServerRequestType } from "@/core/enums";
+import { QDBServerRequestType } from "@/core/enums";
 
 interface QDBOptions {
     username: string;
@@ -7,11 +7,11 @@ interface QDBOptions {
 
 interface QDBRoute{
     path: string;
-    method?: QdbServerRequestType;
+    method?: QDBServerRequestType;
 }
 
 interface QDBServerQuery{
-    method: QdbServerRequestType;
+    method: QDBServerRequestType;
     data: any;
 }
 
