@@ -33,6 +33,194 @@ server.mountDb(db);
 server.listen();
 ```
 
+## WebSocket API Documentation
+
+DroneQ provides a powerful WebSocket API that allows direct communication with the database server. You can connect to the WebSocket server using the following URL format:
+```
+ws://localhost:3000/{db_name}/{table_name}
+```
+or
+```
+ws://localhost:3000/{db_name}/{table_name}/{primary_key_value}
+```
+
+### Message Types
+
+There are two main types of messages:
+1. `query` - One-time operations that execute and return results
+2. `subscribe` - Continuous operations that listen for changes based on an interval
+
+### HTTP Methods
+
+The API supports the following HTTP methods:
+- `PUT` - Creates a new table and can load initial data
+- `GET` - Retrieves data from a table or a single row based on the route
+- `DELETE` - Deletes a row, table, or database based on the route
+- `POST` - Used to populate data into an existing table
+- `PATCH` - (Reserved for future use)
+
+### Message Format Examples
+
+#### 1. Creating a Table (PUT)
+
+```json
+{
+    "type": "query",
+    "method": "PUT",
+    "throwOnError": true,
+    "columns": [
+        { "name": "uid", "type": "INTEGER", "constraints": [ "PRIMARY KEY" ] },
+        { "name": "model", "type": "TEXT" },
+        { "name": "name", "type": "TEXT" }
+    ],
+    "data": [
+        {
+            "uid": 1,
+            "model": "Genesys",
+            "name": "Brian"
+        }
+    ]
+}
+```
+
+#### 2. Subscribing to Updates (GET)
+
+```json
+{
+    "type": "subscribe",
+    "method": "GET",
+    "throwOnError": false,
+    "interval": 1000,  // Optional: polling interval in milliseconds
+    "timeout": 60000   // Optional: subscription timeout in milliseconds
+}
+```
+
+#### 3. Adding Data (POST)
+
+```json
+{
+    "type": "query",
+    "method": "POST",
+    "throwOnError": true,
+    "data": [
+        {
+            "uid": 1,
+            "model": "Genesys",
+            "name": "Brian"
+        }
+    ],
+    "onConflict": "REPLACE"  // Optional: conflict resolution strategy
+}
+```
+
+#### 4. Deleting Data (DELETE)
+
+```json
+{
+    "type": "query",
+    "method": "DELETE",
+    "throwOnError": true
+}
+```
+
+### Testing the API
+
+1. **Using WebSocket Client**
+   ```javascript
+   const ws = new WebSocket('ws://localhost:3000/mydb/users');
+   
+   ws.onopen = () => {
+     // Create a new table
+     ws.send(JSON.stringify({
+       type: 'query',
+       method: 'PUT',
+       throwOnError: true,
+       columns: [
+         { "name": "id", "type": "INTEGER", "constraints": [ "PRIMARY KEY" ] },
+         { "name": "name", "type": "TEXT" }
+       ]
+     }));
+   };
+   
+   ws.onmessage = (event) => {
+     const response = JSON.parse(event.data);
+     console.log('Received:', response);
+   };
+   ```
+
+### Route Examples
+
+1. **Get All Records**
+   ```
+   ws://localhost:3000/mydb/users
+   ```
+
+2. **Get Single Record**
+   ```
+   ws://localhost:3000/mydb/users/1
+   ```
+
+3. **Delete Record**
+   ```
+   ws://localhost:3000/mydb/users/1
+   ```
+
+4. **Delete Table**
+   ```
+   ws://localhost:3000/mydb/users
+   ```
+
+5. **Delete Database**
+   ```
+   ws://localhost:3000/mydb
+   ```
+
+### Best Practices
+
+1. **Error Handling**
+   - Set `throwOnError: true` for critical operations
+   - Set `throwOnError: false` for subscription operations to prevent connection drops
+   - Always check the response's `success` field and handle `error` messages
+
+2. **Subscriptions**
+   - Use subscriptions for real-time updates
+   - Set appropriate `interval` values (default: 1000ms)
+   - Use `timeout` to automatically clean up long-running subscriptions
+   - Clean up subscriptions when no longer needed
+
+3. **Data Operations**
+   - Use PUT for table creation and initial data
+   - Use POST for adding data to existing tables
+   - Use DELETE with caution, especially for table/database deletion
+   - Use `onConflict` option to handle duplicate entries
+
+4. **Performance**
+   - Batch operations when possible
+   - Use appropriate indexes for frequently queried columns
+   - Monitor subscription intervals
+   - Clean up unused subscriptions
+
+### Response Format
+
+All responses follow this general format:
+```json
+{
+    "success": true/false,
+    "data": {}, // or [] for multiple results
+    "error": null // or error message if success is false
+}
+```
+
+### Error Messages
+
+Common error messages you might encounter:
+- `Database '{db_name}' not found`
+- `Table '{table_name}' does not exist`
+- `Table '{table_name}' already exists`
+- `No data provided`
+- `Column name '{name}' is not allowed`
+- `Route of '{route}' is not associated with any table or alias`
+
 ## API Documentation
 
 ### QDBServer
@@ -110,7 +298,33 @@ The QDB class provides methods for queue-based operations:
 ## Development
 
 ```bash
-# Install dependencies
+{
+    "type": "query",
+    "method": "PUT",
+    "throwOnError": true,
+    "columns": [
+        { "name": "uid", "type": "INTEGER", "constraints": [ "PRIMARY KEY" ] },
+        { "name": "model", "type": "TEXT" },
+        { "name": "name", "type": "TEXT" }
+    ],
+    "data": [
+        {
+            "uid": 1,
+            "model": "Genesys",
+            "name": "Brian"
+        },
+        {
+            "uid": 2,
+            "model": "Exodus",
+            "name": "Brian"
+        },
+        {
+            "uid": 3,
+            "model": "Neo",
+            "name": "Brian"
+        }
+    ]
+}# Install dependencies
 npm install
 
 # Start development server
