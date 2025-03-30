@@ -2,7 +2,7 @@
 
 A lightweight and fast queue database server with WebSocket support for real-time data streaming.
 
-[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg)](https://www.buymeacofffee.com/thecodeguyy)
+[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg)](https://www.buymeacoffee.com/thecodeguyy)
 
 ## Installation
 
