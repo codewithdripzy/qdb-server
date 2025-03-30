@@ -1,6 +1,6 @@
 {
   "name": "queuedb",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A lightweight and fast queue database server with WebSocket support for real-time data streaming",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -39,17 +39,19 @@
   },
   "homepage": "https://github.com/codewithdripzy/qdb-server#readme",
   "devDependencies": {
-    "@types/node": "^20.11.24",
+    "@types/node": "^22.13.14",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.8.2"
   },
   "dependencies": {
-    "@types/sqlite3": "^3.1.11",
+    "@types/bcrypt": "^5.0.2",
+    "@types/sqlite3": "^5.1.0",
     "@types/ws": "^8.18.0",
     "auth-validify": "^1.0.5",
+    "bcrypt": "^5.1.1",
     "module-alias": "^2.2.3",
     "sqlite3": "^5.1.7",
     "ws": "^8.18.1"
