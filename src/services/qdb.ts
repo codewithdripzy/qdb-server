@@ -1,10 +1,10 @@
-import QDBConfig from "@/config/setup";
-import QDBQueries from "@/database/queries";
-import { QDBOptions } from "@/interfaces/qdb";
+import QDBConfig from "../config/setup";
+import QDBQueries from "../database/queries";
+import { QDBOptions } from "../interfaces/qdb";
 import { Password } from "auth-validify";
-import { QDBQueryResult, QDBTable, QDBTableData, QDBInsertData, QDBDeleteData, QDBDeleteTableData, QDBDeleteDbData } from "@/interfaces/tables";
+import { QDBQueryResult, QDBTable, QDBTableData, QDBInsertData, QDBDeleteData, QDBDeleteTableData, QDBDeleteDbData } from "../interfaces/tables";
 import { Database } from "sqlite3/lib/sqlite3";
-import { TableColumnConstraints, TableConflictOptions } from "@/core/enums";
+import { TableColumnConstraints, TableConflictOptions } from "../core/enums";
 
 class QDB{
     name: string;

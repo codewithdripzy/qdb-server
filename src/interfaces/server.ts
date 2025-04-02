@@ -1,6 +1,6 @@
-import { QDBServerRequestType, QDBServerType } from "@/core/enums";
+import { QDBServerRequestType, QDBServerType } from "../core/enums";
 import { QDBTableColumn } from "./tables";
-import { TableConflictOptions } from "@/core/enums";
+import { TableConflictOptions } from "../core/enums";
 interface QDBServerOptions {
     port: number;
 }

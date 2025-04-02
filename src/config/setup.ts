@@ -1,8 +1,8 @@
 // this file will be used to setup default tables, permissions, roles, etc.
 import fs from "fs";
-import QDBQueries from "@/database/queries";
+import QDBQueries from "../database/queries";
 import { Database } from "sqlite3/lib/sqlite3";
-import { TableColumnConstraints, TableColumnType, TableConflictOptions } from "@/core/enums";
+import { TableColumnConstraints, TableColumnType, TableConflictOptions } from "../core/enums";
 
 class QDBConfig{
     dbName: string;

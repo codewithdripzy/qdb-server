@@ -1,4 +1,4 @@
-import { TableColumnConstraints, TableColumnType, TableConflictOptions } from "@/core/enums";
+import { TableColumnConstraints, TableColumnType, TableConflictOptions } from "../core/enums";
 
 export interface ForeignKeyReference {
     table: string;

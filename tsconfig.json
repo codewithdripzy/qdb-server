@@ -16,7 +16,6 @@
     "declarationMap": true,
     "sourceMap": true,
     "paths": {
-      "@/*": ["src/*"],
       "*": ["node_modules/*"]
     }
   },

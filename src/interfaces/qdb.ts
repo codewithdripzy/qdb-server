@@ -1,4 +1,4 @@
-import { QDBServerRequestType } from "@/core/enums";
+import { QDBServerRequestType } from "../core/enums";
 
 interface QDBOptions {
     username: string;

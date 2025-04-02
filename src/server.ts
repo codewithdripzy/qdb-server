@@ -1,9 +1,9 @@
-import QDB from "@/services/qdb";
-import { QDBServerOptions, QDBServerQuery, QDBServerResponse } from "@/interfaces/server";
+import QDB from "./services/qdb";
+import { QDBServerOptions, QDBServerQuery, QDBServerResponse } from "./interfaces/server";
 import { createServer, Server } from "http";
 import { WebSocket, WebSocketServer } from "ws";
-import { QDBServerRequestType, QDBServerType, TableConflictOptions } from "@/core/enums";
-import { QDBRoute } from "@/interfaces/qdb";
+import { QDBServerRequestType, QDBServerType, TableConflictOptions } from "./core/enums";
+import { QDBRoute } from "./interfaces/qdb";
 import { TABLE_NAMES_NOTALLOWED } from "./core/values";
 import { QDBTableData } from "./interfaces/tables";
 

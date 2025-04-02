@@ -1,6 +1,6 @@
-import { CreateTableOptions, DeleteTableOptions, InsertTableOptions, InsertManyTableOptions, QDBExecuteOptions, SelectTableOptions, UpdateTableOptions, WhereOptions, GetTablesOptions, DeleteByPrimaryKeyOptions } from "@/interfaces/tables";
+import { CreateTableOptions, DeleteTableOptions, InsertTableOptions, InsertManyTableOptions, QDBExecuteOptions, SelectTableOptions, UpdateTableOptions, WhereOptions, GetTablesOptions, DeleteByPrimaryKeyOptions } from "../interfaces/tables";
 import { Database } from "sqlite3/lib/sqlite3";
-import { TableColumnConstraints } from "@/core/enums";
+import { TableColumnConstraints } from "../core/enums";
 
 class QDBQueries{
     db: Database;
