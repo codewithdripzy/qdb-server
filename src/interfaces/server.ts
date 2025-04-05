@@ -4,7 +4,7 @@ import { QDBTableColumn } from "./tables";
 import { TableConflictOptions } from "../core/enums";
 
 interface QDBServerOptions {
-    port: number;
+    port?: number;
     server?: Server;
 }
 

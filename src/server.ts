@@ -18,7 +18,7 @@ class QDBServer {
 
     constructor(name: string, options: QDBServerOptions) {
         this.name = name;
-        this.port = options.port;
+        this.port = options.port ?? 3000;
         this.dbs = [];
         this.server = options.server ?? createServer();
         this.conn = new WebSocketServer({ server: this.server });
@@ -461,6 +461,12 @@ class QDBServer {
     }
 
     async listen() {
+        // check if the server is already listening
+        if(this.server.listening) {
+            console.log(`QDB Server is listening on port ${this.port}`);
+            return;
+        }
+
         this.server.listen(this.port, () => {
             console.log(`QDB Server is running on port ${this.port}`);
         });
