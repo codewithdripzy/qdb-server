@@ -12,16 +12,17 @@ class QDBConfig{
         this.dbName = dbName;
 
         // make the db directory if it doesn't exist
-        if (!fs.existsSync("../db")) {
-            fs.mkdirSync("../db");
+        // create a db directory inside the root of the project even if there's no src folder
+        if (!fs.existsSync("db")) {
+            fs.mkdirSync("db");
         }
 
-        if (!fs.existsSync(`../db/${this.dbName}`)) {
-            fs.mkdirSync(`../db/${this.dbName}`);
+        if (!fs.existsSync(`db/${this.dbName}`)) {
+            fs.mkdirSync(`db/${this.dbName}`);
         }
 
         // create the config db
-        this.queries = new QDBQueries(new Database(`../db/${this.dbName}/${this.dbName}.config.db`));
+        this.queries = new QDBQueries(new Database(`db/${this.dbName}/${this.dbName}.config.db`));
     }
 
     async setup(){
