@@ -18,7 +18,7 @@ class QDB{
     constructor(name: string, options: QDBOptions) {
         this.name = name;
         this.options = options;
-        this.db = new Database(`src/db/${this.name}/${this.name}.db`);
+        this.db = new Database(`src/${this.name}/${this.name}.db`);
         this.config = new QDBConfig(this.name);
         this.queries = new QDBQueries(this.db);
         this.psw = new Password();
