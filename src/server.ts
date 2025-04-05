@@ -14,7 +14,7 @@ class QDBServer {
     private server: Server;
     private clients: Set<WebSocket>;
     private conn: WebSocketServer;
-    private interceptors: { path: string; handler: (ws: WebSocket, routes: string[], data: QDBServerQuery) => Promise<QDBServerResponse> }[];
+    private interceptors: { path: string; handler: (data: QDBServerQuery) => Promise<QDBServerResponse> }[];
 
     constructor(name: string, options: QDBServerOptions) {
         this.name = name;
@@ -71,7 +71,7 @@ class QDBServer {
             // check if there's an interceptor for the request
             const interceptor = this.interceptors.find(interceptor => interceptor.path === requestRoutes[0]);
             if(interceptor) {
-                const response = await interceptor.handler(ws, requestRoutes, data);
+                const response = await interceptor.handler(data);
                 ws.send(JSON.stringify(response));
                 return;
             }
@@ -452,7 +452,7 @@ class QDBServer {
         this.dbs.push({ path: alias || db.name, db, routes: routes || [] });
     }
 
-    public intercept(path: string, handler: (ws: WebSocket, routes: string[], data: QDBServerQuery) => Promise<QDBServerResponse>) {
+    public intercept(path: string, handler: (data: QDBServerQuery) => Promise<QDBServerResponse>) {
         this.interceptors.push({ path, handler });
     }
 
