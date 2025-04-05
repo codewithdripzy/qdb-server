@@ -26,12 +26,110 @@ const db = new QDB("mydb", {
     password: "",
 });
 
+// use interceptors (Optional)
+server.intercept("/mydb", (data) => {
+    // do something
+})
+
 // Mount the database to the server
 server.mountDb(db);
 
 // Start the server
 server.listen();
 ```
+
+## Interceptors
+
+QDB provides a powerful interceptor system that allows you to intercept and modify database operations before they are executed. This is useful for implementing middleware-like functionality such as authentication, logging, data validation, and more.
+
+### Basic Usage
+
+```typescript
+// Create a new QDB server
+const server = new QDBServer("MyApp", {
+    port: 3000,
+});
+
+// Create a new database instance
+const db = new QDB("mydb", {
+    username: "root",
+    password: "",
+});
+
+// Add an interceptor for all operations on the "mydb" database
+server.intercept("/mydb", (operation) => {
+    // Log the operation
+    console.log(`Operation on mydb: ${operation.method}`);
+    
+    // You can modify the operation before it's executed
+    if (operation.method === "POST") {
+        // Add a timestamp to all new records
+        operation.data = operation.data.map(record => ({
+            ...record,
+            createdAt: new Date().toISOString()
+        }));
+    }
+    
+    // Return the modified operation
+    return operation;
+});
+
+// Mount the database to the server
+server.mountDb(db);
+```
+
+### Interceptor Function Parameters
+
+The interceptor function receives an operation object with the following properties:
+
+- `method`: The HTTP method being used (GET, POST, PUT, DELETE)
+- `type`: The operation type (query or subscribe)
+- `data`: The data being sent (for POST/PUT operations)
+- `columns`: The table schema (for PUT operations)
+- `throwOnError`: Whether errors should be thrown
+- `interval`: The subscription interval (for subscribe operations)
+
+### Multiple Interceptors
+
+You can add multiple interceptors for the same database. They will be executed in the order they were added:
+
+```typescript
+// First interceptor - Authentication
+server.intercept("/mydb", (operation) => {
+    // Check authentication
+    if (!isAuthenticated(operation)) {
+        throw new Error("Unauthorized");
+    }
+    return operation;
+});
+
+// Second interceptor - Logging
+server.intercept("/mydb", (operation) => {
+    // Log the operation
+    console.log(`Authenticated operation: ${operation.method}`);
+    return operation;
+});
+```
+
+### Error Handling
+
+You can throw errors in interceptors to prevent operations from being executed:
+
+```typescript
+server.intercept("/mydb", (operation) => {
+    if (operation.method === "DELETE") {
+        throw new Error("Delete operations are not allowed");
+    }
+    return operation;
+});
+```
+
+### Best Practices
+
+1. **Keep interceptors lightweight**: Interceptors are executed for every operation, so they should be as efficient as possible.
+2. **Chain modifications**: Return the modified operation object to allow other interceptors to process it.
+3. **Use for cross-cutting concerns**: Interceptors are perfect for implementing features that need to be applied across multiple operations.
+4. **Handle errors appropriately**: Use throwOnError to control error behavior.
 
 ## WebSocket API Documentation
 
