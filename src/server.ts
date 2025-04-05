@@ -14,6 +14,7 @@ class QDBServer {
     private server: Server;
     private clients: Set<WebSocket>;
     private conn: WebSocketServer;
+    private interceptors: { path: string; handler: (ws: WebSocket, routes: string[], data: QDBServerQuery) => Promise<QDBServerResponse> }[];
 
     constructor(name: string, options: QDBServerOptions) {
         this.name = name;
@@ -22,6 +23,7 @@ class QDBServer {
         this.server = createServer();
         this.conn = new WebSocketServer({ server: this.server });
         this.clients = new Set();
+        this.interceptors = [];
 
         this.setupConnection();
     }
@@ -63,6 +65,14 @@ class QDBServer {
             
             if(requestRoutes.length < 1) {
                 ws.send(JSON.stringify({ error: `Invalid Query, Query must be like this: 'ws://localhost:3000/{db_name}/{table_name}' or 'ws://localhost:3000/{db_name}/{table_name}/{primary_key_value}'` }));
+                return;
+            }
+
+            // check if there's an interceptor for the request
+            const interceptor = this.interceptors.find(interceptor => interceptor.path === requestRoutes[0]);
+            if(interceptor) {
+                const response = await interceptor.handler(ws, requestRoutes, data);
+                ws.send(JSON.stringify(response));
                 return;
             }
 
@@ -438,8 +448,12 @@ class QDBServer {
         });
     }
 
-    mountDb(db: QDB, alias?: string, routes?: QDBRoute[]) {
+    public mountDb(db: QDB, alias?: string, routes?: QDBRoute[]) {
         this.dbs.push({ path: alias || db.name, db, routes: routes || [] });
+    }
+
+    public intercept(path: string, handler: (ws: WebSocket, routes: string[], data: QDBServerQuery) => Promise<QDBServerResponse>) {
+        this.interceptors.push({ path, handler });
     }
 
     async listen() {
