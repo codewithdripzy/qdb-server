@@ -1,8 +1,11 @@
+import { Server } from "http";
 import { QDBServerRequestType, QDBServerType } from "../core/enums";
 import { QDBTableColumn } from "./tables";
 import { TableConflictOptions } from "../core/enums";
+
 interface QDBServerOptions {
     port: number;
+    server?: Server;
 }
 
 interface QDBServerQuery{

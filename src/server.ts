@@ -20,7 +20,7 @@ class QDBServer {
         this.name = name;
         this.port = options.port;
         this.dbs = [];
-        this.server = createServer();
+        this.server = options.server ?? createServer();
         this.conn = new WebSocketServer({ server: this.server });
         this.clients = new Set();
         this.interceptors = [];
