@@ -14,6 +14,7 @@ npm install queuedb
 
 ```typescript
 import { QDB, QDBServer } from 'queuedb';
+import { createServer } from 'http';
 
 // Create a new QDB server
 const server = new QDBServer("MyApp", {
@@ -37,6 +38,41 @@ server.mountDb(db);
 // Start the server
 server.listen();
 ```
+
+### Using an External HTTP Server
+
+If you want to use QueueDB with your existing HTTP server instead of running it on a separate port, you can pass your server instance to QueueDB:
+
+```typescript
+import { QDB, QDBServer } from 'queuedb';
+import { createServer } from 'http';
+import express from 'express';
+
+// Create your HTTP server
+const app = express();
+const httpServer = createServer(app);
+
+// Create a new QDB server with your HTTP server
+const server = new QDBServer("MyApp", {
+    server: httpServer, // Pass your HTTP server instance
+});
+
+// Create a new database instance
+const db = new QDB("mydb", {
+    username: "root",
+    password: "",
+});
+
+// Mount the database to the server
+server.mountDb(db);
+
+// Start your HTTP server
+httpServer.listen(3000, () => {
+    console.log('Server running on port 3000');
+});
+```
+
+This way, QueueDB will use your existing HTTP server instead of creating a new one, allowing you to run both your application and QueueDB on the same port.
 
 ## Interceptors
 

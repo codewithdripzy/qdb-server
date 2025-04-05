@@ -460,15 +460,25 @@ class QDBServer {
         this.interceptors.push({ path, handler, next });
     }
 
-    async listen() {
+    async listen(callback?: () => void) {
         // check if the server is already listening
         if(this.server.listening) {
             // get the port from the server
+            if(callback) {
+                callback();
+                return;
+            }
+
             console.log(`QDB Server is active on main port`);
             return;
         }
 
         this.server.listen(this.port, () => {
+            if(callback) {
+                callback();
+                return;
+            }
+
             console.log(`QDB Server is running on port ${this.port}`);
         });
     }
