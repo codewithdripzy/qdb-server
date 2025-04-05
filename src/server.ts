@@ -463,7 +463,8 @@ class QDBServer {
     async listen() {
         // check if the server is already listening
         if(this.server.listening) {
-            console.log(`QDB Server is listening on port ${this.port}`);
+            // get the port from the server
+            console.log(`QDB Server is active on main port`);
             return;
         }
 
