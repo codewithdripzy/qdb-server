@@ -48,7 +48,7 @@ interface DeleteTableOptions {
     where: string;
 }
 
-interface DeleteByPrimaryKeyOptions{
+interface DeleteByPrimaryKeyOptions {
     table: string;
     primaryKey: {
         key: string;
@@ -56,39 +56,40 @@ interface DeleteByPrimaryKeyOptions{
     };
 }
 
-interface QDBExecuteOptions{
+interface QDBExecuteOptions {
     query: string;
     timeout?: number;
 }
 
-interface WhereOptions{
+interface WhereOptions {
     [key: string]: string | number | boolean;
 }
 
-interface QDBTable{
+interface QDBTable {
     name: string;
     columns: QDBTableColumn[];
-    data: Record<string, any>[];
+    data?: Record<string, any>[];
 }
 
-interface QDBTableColumn{
+interface QDBTableColumn {
     name: string;
     type: TableColumnType;
     constraints?: TableColumnConstraints[];
     foreignKey?: ForeignKeyReference;
+    default?: string | number | boolean;
 }
 
-interface QDBInsertData{
+interface QDBInsertData {
     name: string;
     data: Record<string, any>[];
     onConflict?: TableConflictOptions;
 }
 
-interface QDBDeleteDbData{
+interface QDBDeleteDbData {
     name: string;
 }
 
-interface QDBDeleteData{
+interface QDBDeleteData {
     name: string;
     primaryKey: {
         key: string;
@@ -96,22 +97,22 @@ interface QDBDeleteData{
     };
 }
 
-interface QDBDeleteTableData{
+interface QDBDeleteTableData {
     name: string;
 }
 
-interface QDBQueryResult{
+interface QDBQueryResult {
     success: boolean;
     data: any;
     error?: any;
 }
 
-interface QDBTableData{
+interface QDBTableData {
     primaryKey: string;
     data: Record<string, any>[];
 }
 
-export type { 
+export type {
     CreateTableOptions,
     InsertTableOptions,
     InsertManyTableOptions,

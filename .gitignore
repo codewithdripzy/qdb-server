@@ -46,3 +46,6 @@ yarn-error.log*
 *.db-trace
 *.db-wal
 *.db-lock
+
+pnpm-lock.yaml
+package-lock.json

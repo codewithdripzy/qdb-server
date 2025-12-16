@@ -2,16 +2,16 @@ import { QDBServerRequestType } from "../core/enums";
 import { QDBServerQuery } from "./server";
 
 interface QDBOptions {
-    username: string;
-    password: string;
+    username?: string;
+    password?: string;
 }
 
-interface QDBRoute{
+interface QDBRoute {
     path: string;
     method?: QDBServerRequestType;
 }
 
-interface QDBServerRequest{
+interface QDBServerRequest {
     method: QDBServerRequestType;
     data: any;
 }
