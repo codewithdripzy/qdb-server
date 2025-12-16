@@ -1,6 +1,6 @@
 {
   "name": "queuedb",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "bin": {
     "qdb": "./bin/qdb.js"
   },
@@ -35,10 +35,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codewithdripzy/me.git"
+    "url": "https://github.com/codewithdripzy/qdb-server.git"
   },
   "bugs": {
     "url": "https://github.com/codewithdripzy/qdb-server/issues"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "homepage": "https://github.com/codewithdripzy/qdb-server#readme",
   "devDependencies": {
