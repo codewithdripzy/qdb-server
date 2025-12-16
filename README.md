@@ -1,4 +1,4 @@
-# QDB v2: Real-time Queuing Database
+# QDB: Real-time Queuing Database
 
 QDB is a lightweight, local-first Real-time Queuing Database designed to be a "Firebase-lite" for your Node.js projects. It combines a JSON-based database, a robust job queue, real-time WebSocket subscriptions, and an admin UI into a single zero-dependency (almost) package.
 
