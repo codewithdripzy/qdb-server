@@ -33,7 +33,10 @@
   ],
   "author": "Emmanuel Bankole",
   "license": "MIT",
-  "repository": "https://github.com/codewithdripzy/qdb-server.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codewithdripzy/qdb-server.git"
+  },
   "bugs": {
     "url": "https://github.com/codewithdripzy/qdb-server/issues"
   },
